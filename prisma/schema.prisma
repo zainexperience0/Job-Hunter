@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  username      String
+  email         String
+  password      String
+  image         String
+  role          Role            @default(USER)
+  workingOnJobs WorkingOnJobs[] @relation("WorkingOnJobs")
+  completedJobs CompletedJobs[] @relation("CompletedJobs")
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model WorkingOnJobs {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  jobId     String   @db.ObjectId
+  job       Job      @relation("WorkingOnJobs", fields: [jobId], references: [id])
+  user      User     @relation("WorkingOnJobs", fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model CompletedJobs {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  jobId     String   @db.ObjectId
+  job       Job      @relation("CompletedJobs", fields: [jobId], references: [id])
+  user      User     @relation("CompletedJobs", fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Job {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  title         String
+  description   String
+  acceptance    String
+  status        Status
+  minCompJobs   Int             @default(0)
+  bounty        Int             @default(0)
+  bountyActive  Boolean         @default(false)
+  workingOnJobs WorkingOnJobs[] @relation("WorkingOnJobs")
+  completedJobs CompletedJobs[] @relation("CompletedJobs")
+  due           Int //hours
+
+  level    Level
+  delivery String @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Status {
+  OPEN
+  CLOSED
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
