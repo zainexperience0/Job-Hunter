@@ -1,6 +1,7 @@
 // GET
 // baseurl/api/v1/dynamic/model_name      return all records
 
+import { handleModel } from "@/lib/handleModel";
 import { prismaInstance } from "@/lib/prismaInit";
 import { allModels } from "@/lib/schemas";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,6 +16,7 @@ export async function GET(req: NextRequest, params: any) {
   const fields = url.searchParams.get("fields") as any;
   const sortBy = url.searchParams.get("sortby") as any;
   const sortField = url.searchParams.get("sortfield") as any;
+  const act = url.searchParams.get("act") as any;
 
   // console.log({ model_name, id, page, search, fields });
 
@@ -22,43 +24,38 @@ export async function GET(req: NextRequest, params: any) {
   if (!schema?.model) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
   }
+
+
   let selectObj: any = {};
 
   // baseurl/api/v1/dynamic/model_name/id    return a single record
   if (id) {
-    //@ts-ignore
 
+    
     schema.fields
       ?.filter((field: any) => field.backend?.includes("findUnique"))
       ?.map((field) => {
         selectObj[field.slug] = true;
       });
 
+    const newSelectObj = handleModel(selectObj, model_name, act);
+
     const data = await prismaInstance[model_name].findUnique({
-      where: { id },
-      select: { ...selectObj, id: true },
+      where: {
+        id
+      },
+      select: { ...newSelectObj, id: true },
     });
     return NextResponse.json(data, { status: 200 });
   }
-
-  schema.fields
-    ?.filter((field: any) => field.backend?.includes("findMany"))
-    ?.map((field) => {
-      selectObj[field.slug] = true;
-    });
-
   const obj: any = {};
-
-  if (page) {
-    obj["skip"] = parseInt(page) * 5 - 5;
-    obj["take"] = 5;
-  }
 
   if (equal === "true") {
     obj.where = {
       OR: [],
     };
     if (fields) {
+      
       const fields_1 = fields.split(",");
       fields_1.forEach((field: any) => {
         obj.where.OR.push({
@@ -101,6 +98,20 @@ export async function GET(req: NextRequest, params: any) {
       });
     }
   }
+  schema.fields
+    ?.filter((field: any) => field.backend?.includes("findMany"))
+    ?.map((field) => {
+      selectObj[field.slug] = true;
+    });
+
+
+
+  if (page) {
+    obj["skip"] = parseInt(page) * 5 - 5;
+    obj["take"] = 5;
+  }
+
+  
 
   if (sortBy && sortField) {
     obj["orderBy"] = {

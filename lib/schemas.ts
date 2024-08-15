@@ -189,20 +189,6 @@ export const allModels = [
         },
       },
       {
-        name: "Delivery",
-        slug: "delivery",
-        type: "markdownInput",
-        defaultValue: "",
-        required: false, // tells whether this field is required in UI inputs
-        dataType: "string", // Schema datatype mapping
-        customClassName: "",
-        backend: ["findFirst", "findUnique", "findMany", "update", "delete"],
-        frontend: ["list", "view", "update", "delete"],
-        valueGetter: () => {
-          return "";
-        },
-      },
-      {
         name: "Created At",
         slug: "createdAt",
         type: "",
@@ -236,11 +222,11 @@ export const allModels = [
     name: "User",
     model: "user",
     meta: {
-      title: "title",
+      title: "username",
     },
     updateField: "updatedAt",
     searchConfig: {
-      searchFields: ["title"],
+      searchFields: ["email", "username"],
       sortBy: "desc",
       sortField: "createdAt",
     },
@@ -382,3 +368,93 @@ export const allModels = [
     ],
   },
 ];
+
+
+
+export const loginSchema = [
+  {
+    name: "Login",
+    model: "user",
+    meta: {
+      title: "username",
+    },
+    updateField: "updatedAt",
+    searchConfig: {
+      searchFields: ["email", "username"],
+      sortBy: "desc",
+      sortField: "createdAt",
+    },
+    fields: [
+      {
+        name: "Email",
+        slug: "email",
+        type: "emailInput",
+        defaultValue: "",
+        required: true, // tells whether this field is required in UI inputs
+        dataType: "string", // Schema datatype mapping
+        customClassName: "",
+        backend: [
+          "findFirst",
+          "findUnique",
+          "findMany",
+          "create",
+          "update",
+          "delete",
+        ],
+        frontend: ["list", "view", "update", "delete", "create"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Password",
+        slug: "password",
+        type: "passwordInput",
+        defaultValue: "",
+        required: true, // tells whether this field is required in UI inputs
+        dataType: "string", // Schema datatype mapping
+        customClassName: "",
+        backend: [
+          "findFirst",
+          "findUnique",
+          "findMany",
+          "create",
+          "update",
+          "delete",
+        ],
+        frontend: ["list", "view", "update", "delete", "create"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Created At",
+        slug: "createdAt",
+        type: "",
+        defaultValue: "",
+        required: false,
+        dataType: "time",
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "findMany"],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Updated At",
+        slug: "updatedAt",
+        type: "",
+        defaultValue: "",
+        required: false,
+        dataType: "time",
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "findMany"],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+    ],
+  },
+]

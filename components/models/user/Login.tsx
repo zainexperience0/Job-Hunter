@@ -13,18 +13,20 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { InputWrapper } from "@/components/custom/inputWrapper";
 import Image from "next/image";
-import { generateFromEmail } from "unique-username-generator";
-export const CreateUser = ({ model, callbackFn, relation, page}: any) => {
+import { PasswordInputField } from "@/components/custom/FieldList/PasswordInput";
+import { EmailInputField } from "@/components/custom/FieldList/EmailInputField";
+import { useLocalStorage } from 'usehooks-ts'
+export const Login = ({ model, callbackFn, relation, page }: any) => {
+  const [userId, setUserId, removeUserId] = useLocalStorage('id', '')
   const [data, setData] = useState({ ...relation });
-  const [creating, setCreating] = useState(false);
+  const [login, setLogin] = useState(false);
   const [createSuccess, setCreateSuccess] = useState(false);
   const [createFail, setCreateFail] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isRelational, setIsRelational] = useState(false);
 
-  const createRecord = () => {
+  const handleLogin = () => {
     const requiredFields = model.fields?.filter((field: any) => field.required);
 
     if (requiredFields?.length > 0) {
@@ -40,37 +42,31 @@ export const CreateUser = ({ model, callbackFn, relation, page}: any) => {
         return;
       }
     }
-    setCreating(true);
+    setLogin(true);
     axios
-      .post(`/api/v1/dynamic/${model.model}`, {
-        ...data,
-        username: generateFromEmail(data.email, 5),
-      })
+      .post(`/api/login`, data)
       .then((resp: any) => {
-        setCreating(false);
+        setLogin(false);
         setCreateSuccess(true);
+        setUserId(resp.data.id)
         setTimeout(() => {
           resetFields();
-          if (!callbackFn) {
-           if(data.role === "admin"){
-            window.location.href = `/${prePath}/${model.model}`;
-           }else{
-            window.location.href = `/${prePath}/job`;
-           }
-          } else {
-            callbackFn();
-          }
+            if (!callbackFn) {
+              window.location.href = `/${prePath}/job`;
+            } else {
+              callbackFn();
+            }
         }, 2000);
       })
       .catch((err: any) => {
         console.log(err);
-        setCreating(false);
+        setLogin(false);
         setCreateFail(true);
       });
   };
 
   const resetFields = () => {
-    setCreating(false);
+    setLogin(false);
     setCreateSuccess(false);
     setCreateFail(false);
     setData({ ...relation });
@@ -146,15 +142,24 @@ export const CreateUser = ({ model, callbackFn, relation, page}: any) => {
       )}
       <div className="flex flex-col md:flex-row items-center justify-between space-y-10 md:space-y-0 md:space-x-10">
         <div className="md:w-1/2 flex flex-col justify-center border p-6 rounded-md shadow-md">
-          <InputWrapper model={model} data={data} setData={setData} action={"create"} />
+          <EmailInputField
+            field={model.fields[0]}
+            record={data}
+            setRecord={setData}
+          />
+          <PasswordInputField
+            field={model.fields[1]}
+            record={data}
+            setRecord={setData}
+          />
           <Button
-            onClick={createRecord}
-            disabled={creating || createSuccess || createFail}
+            onClick={handleLogin}
+            disabled={login || createSuccess || createFail}
             className="mt-6"
           >
-            {creating && <Loader className="h-4 w-4 mr-2 animate-spin" />}
-            {creating && "Creating..."}
-            {!creating && !createSuccess && !createFail && "Submit"}
+            {login && <Loader className="h-4 w-4 mr-2 animate-spin" />}
+            {login && "login..."}
+            {!login && !createSuccess && !createFail && "Submit"}
             {createSuccess && <CheckCircle className="h-4 w-4 mr-2" />}
             {createSuccess && `${model.name} created!`}
             {createFail && "Failed to create!"}

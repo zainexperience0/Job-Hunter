@@ -4,11 +4,11 @@ import { DeleteField } from "@/components/models/DeleteField";
 import { EditField } from "@/components/models/EditField";
 import { ListJobs } from "@/components/models/jobs/List";
 import { ViewJob } from "@/components/models/jobs/View";
-import { ListModelData } from "@/components/models/listModelData";
 import { CreateUser } from "@/components/models/user/Create";
+import { ListUsers } from "@/components/models/user/ListUsers";
+import { Login } from "@/components/models/user/Login";
 import { ViewField } from "@/components/models/viewField";
-import { allModels } from "@/lib/schemas";
-import { useSearchParams } from "next/navigation";
+import { allModels, loginSchema } from "@/lib/schemas";
 
 // export function generateMetadata({ params }: any): any {
 //   const dynamicParamaters = params.fields;
@@ -43,6 +43,7 @@ const DynamicPage = ({ params, searchParams }: any) => {
       <div>
         {action === "create" && model !== "user" && <CreateField model={allModels.find((m) => m.model === model)} page={true} />}
         {action === "create" && model === "user" && <CreateUser model={allModels.find((m) => m.model === model)} page={true} />}
+        {action === "login" && <Login model={loginSchema.find((m) => m.model === model)} page={true} />}
         {action === "edit" && <EditField model={allModels.find((m) => m.model === model)} id={fieldId} />}
         {action === "delete" && (
           <DeleteField modelSlug={model} id={fieldId} field={deletefieldKey} />
@@ -53,7 +54,7 @@ const DynamicPage = ({ params, searchParams }: any) => {
     return (
       <div>
         {model === "job" && <ListJobs modelSlug={model} />}
-        {model === "user" && <ListModelData modelSlug={model} />}
+        {model === "user" && <ListUsers modelSlug={model} />}
       </div>
     );
   }

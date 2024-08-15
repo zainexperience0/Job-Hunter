@@ -8,39 +8,14 @@ import {
 } from "@/components/ui/card";
 import { allModels, prePath } from "@/lib/schemas";
 import Link from "next/link";
-import { BugIcon, Loader, MoveRight, Pencil, Plus, Trash } from "lucide-react";
+import { Loader, MoveRight, Pencil, Plus, Trash } from "lucide-react";
 import useInfiniteQuery from "@/lib/hooks/useQuery";
-
 import { cn, isoToDate, timeAgo } from "@/lib/utils";
 import { FilterTools } from "../FilterTools";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useReadLocalStorage } from "usehooks-ts";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-export const ListJobs = ({ modelSlug }: any) => {
-  const router = useRouter();
-  const userId = useReadLocalStorage("id");
-  const [user, setUser] = useState<any>({});
-
-  if(!userId){
-    router.push("/");
-  }
-
-  useEffect(() => {
-    axios
-      .get(`/api/v1/dynamic/user/${userId}?act=getRole`)
-      .then((resp: any) => {
-        setUser(resp.data);
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  }, [userId]);
-  
-
-  
+export const ListUsers = ({ modelSlug }: any) => {
   const [searchQuery, setSearchQuery] = useState(
     `&sortby=desc&sortfield=${
       allModels.find((model) => model.model === modelSlug)?.searchConfig
@@ -52,7 +27,6 @@ export const ListJobs = ({ modelSlug }: any) => {
     modelSlug,
     searchQuery,
   });
-
   const [loading, setLoading] = useState(true);
   const [model, setModel] = useState<any>({});
 
@@ -114,14 +88,12 @@ export const ListJobs = ({ modelSlug }: any) => {
             {/* <SearchModal model={model} setSearchQuery={setSearchQuery} /> */}
             <FilterTools model={model} setSearchQuery={setSearchQuery} />
           </div>
-         {user?.role === "ADMIN" && (
-           <Link
-           href={`/${prePath}/${modelSlug}/create`}
-           className={buttonVariants({ variant: "default", size: "sm" })}
-         >
-           <Plus className="h-5 w-5" />
-         </Link>
-         )}
+          <Link
+            href={`/${prePath}/${modelSlug}/create`}
+            className={buttonVariants({ variant: "default", size: "sm" })}
+          >
+            <Plus className="h-5 w-5" />
+          </Link>
         </div>
       )}
 
@@ -134,35 +106,19 @@ export const ListJobs = ({ modelSlug }: any) => {
                   className="flex flex-col space-y-2 cursor-pointer w-full"
                   href={`/${prePath}/${modelSlug}/view/${item.id}`}
                 >
-                  <div className="flex flex-row space-x-2 items-center">
-                    <h1 className="text-3xl font-semibold text-green-600">
-                      ${item.bounty}
-                    </h1>
-                    <div className="flex text-muted-foreground flex-row space-x-2 items-center">
-                      <BugIcon className="h-5 w-5" />
-                      {item.minCompJobs}
-                    </div>
-                    <div>
-                      <Badge className="bg-blue-300">
-                        {item.bountyActive ? "Open" : "Closed"}
-                      </Badge>
-                    </div>
-                  </div>
-                  <CardTitle className="capitalize flex flex-row space-x-2 group-hover:underline">
+                  <CardTitle className="capitalize items-center flex flex-row space-x-2 group-hover:underline">
+                    <Avatar>
+                      <AvatarImage src={item?.image} />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+
                     <span>{item[model.meta.title]}</span>
                     <MoveRight className=" opacity-75" />
                   </CardTitle>
-                  <CardDescription className=" line-clamp-3 ">
-                    {item.description}
+                  <CardDescription className=" line-clamp-3 text-white">
+                    {item[model.meta.description]}
                   </CardDescription>
                   <div className="flex flex-row space-x-4 items-center">
-                    <div className="flex flex-row space-x-2 items-center">
-                      <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      <p className="text-sm text-muted-foreground ">Name</p>
-                    </div>
                     <p className="text-sm text-muted-foreground ">
                       {isoToDate(item?.createdAt)}
                     </p>
@@ -175,13 +131,10 @@ export const ListJobs = ({ modelSlug }: any) => {
                 </Link>
 
                 <div className="flex flex-row items-center justify-end space-x-2">
-                  <p className="text-sm text-muted-foreground">
-                    {" "}
-                    due {item.due} hours from now
-                  </p>
-                  {user?.role === "ADMIN" && (
-                    <>
-                    <Link
+                  <div>
+                    <Badge variant={item?.role === "ADMIN" ? "destructive" : "secondary"}>{item?.role}</Badge>
+                  </div>
+                  <Link
                     href={`/${prePath}/${modelSlug}/edit/${item.id}`}
                     className={cn(
                       buttonVariants({ variant: "default", size: "sm" })
@@ -197,8 +150,6 @@ export const ListJobs = ({ modelSlug }: any) => {
                   >
                     <Trash className="h-4 w-4" />
                   </Link>
-                    </>
-                  )}
                 </div>
               </CardHeader>
             </Card>

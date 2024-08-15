@@ -25,30 +25,30 @@ model User {
   password      String
   image         String
   role          Role            @default(USER)
+  socialLinks   String[]
   workingOnJobs WorkingOnJobs[] @relation("WorkingOnJobs")
-  completedJobs CompletedJobs[] @relation("CompletedJobs")
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 }
 
-model WorkingOnJobs {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  jobId     String   @db.ObjectId
-  job       Job      @relation("WorkingOnJobs", fields: [jobId], references: [id])
-  user      User     @relation("WorkingOnJobs", fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
+enum JobWorkingStatus {
+  WORKING
+  IN_REVIEW
+  APPROVED
+  NOT_APPROVED
 }
 
-model CompletedJobs {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  jobId     String   @db.ObjectId
-  job       Job      @relation("CompletedJobs", fields: [jobId], references: [id])
-  user      User     @relation("CompletedJobs", fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+model WorkingOnJobs {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String           @db.ObjectId
+  jobId     String           @db.ObjectId
+  status    JobWorkingStatus @default(WORKING)
+  delievery String           @default("")
+  job       Job              @relation("WorkingOnJobs", fields: [jobId], references: [id])
+  user      User             @relation("WorkingOnJobs", fields: [userId], references: [id])
+  createdAt DateTime         @default(now())
+
+  updatedAt DateTime @updatedAt
 }
 
 model Job {
@@ -62,11 +62,9 @@ model Job {
   bounty        Int             @default(0)
   bountyActive  Boolean         @default(false)
   workingOnJobs WorkingOnJobs[] @relation("WorkingOnJobs")
-  completedJobs CompletedJobs[] @relation("CompletedJobs")
   due           Int //hours
 
-  level    Level
-  delivery String @default("")
+  level Level
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
