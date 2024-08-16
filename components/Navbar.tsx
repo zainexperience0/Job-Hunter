@@ -49,13 +49,16 @@ export const Navbar = () => {
       icon: Briefcase,
       active: pathname === "/main/job",
     },
-    {
+  ];
+
+  if (user && user.role === "ADMIN") {
+    routes.push({
       name: "Users",
       path: "/main/user",
       icon: Users,
       active: pathname === "/main/user",
-    }
-  ];
+    });
+  }
 
   return (
     <div className="border-2 rounded-full p-4 flex items-center justify-evenly bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl">
@@ -77,7 +80,6 @@ export const Navbar = () => {
             </span>
           </Link>
         ))}
-
       </div>
       <div className="flex items-center space-x-2">
         <>

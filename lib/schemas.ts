@@ -367,6 +367,113 @@ export const allModels = [
       },
     ],
   },
+  {
+    name: "Working On Jobs",
+    model: "workingOnJobs",
+    meta: {
+      title: "delievery",
+    },
+    updateField: "updatedAt",
+    searchConfig: {
+      searchFields: ["title"],
+      sortBy: "desc",
+      sortField: "createdAt",
+    },
+    fields: [
+      {
+        name: "Delievery",
+        slug: "delievery",
+        type: "markdownInput",
+        defaultValue: "",
+        required: false,
+        dataType: "string",
+        customClassName: "",
+        backend: [
+          "findFirst",
+          "findUnique",
+          "update",
+          "delete",
+          "findMany",
+          "create",
+        ],
+        frontend: ["list", "view", "update", "delete"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Status",
+        slug: "status",
+        type: "selectInput",
+        defaultValue: "WORKING",
+        required: false,
+        dataType: "string",
+        options: ["WORKING", "IN_REVIEW", "APPROVED", "NOT_APPROVED", "POSTED"],
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "create", "update", "delete", "findMany"],
+        frontend: ["list", "view", "delete", "create", "update"],
+        valueGetter: () => {
+          return "OPEN";
+        },
+      },
+      {
+        name: "Job",
+        slug: "job",
+        type: "relation",
+        defaultValue: "",
+        required: true,
+        dataType: "relation",
+        customClassName: "",
+        backend: ["create"],
+        frontend: [],
+        valueGetter: () => {
+          return ""
+        }
+      },
+      {
+        name: "User",
+        slug: "user",
+        type: "relation",
+        defaultValue: "",
+        required: true,
+        dataType: "relation",
+        customClassName: "",
+        backend: ["create"],
+        frontend: [],
+        valueGetter: () => {
+          return ""
+        }
+      },
+      {
+        name: "Created At",
+        slug: "createdAt",
+        type: "",
+        defaultValue: "",
+        required: false,
+        dataType: "time",
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "findMany"],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Updated At",
+        slug: "updatedAt",
+        type: "",
+        defaultValue: "",
+        required: false,
+        dataType: "time",
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "findMany"],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+    ],
+  },
 ];
 
 

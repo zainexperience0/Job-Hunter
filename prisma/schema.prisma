@@ -32,6 +32,7 @@ model User {
 }
 
 enum JobWorkingStatus {
+  POSTED
   WORKING
   IN_REVIEW
   APPROVED
@@ -42,7 +43,7 @@ model WorkingOnJobs {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
   userId    String           @db.ObjectId
   jobId     String           @db.ObjectId
-  status    JobWorkingStatus @default(WORKING)
+  status    JobWorkingStatus @default(POSTED)
   delievery String           @default("")
   job       Job              @relation("WorkingOnJobs", fields: [jobId], references: [id])
   user      User             @relation("WorkingOnJobs", fields: [userId], references: [id])

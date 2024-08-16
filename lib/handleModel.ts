@@ -10,6 +10,7 @@ export const handleModel = (select:any, model:any, act:any) => {
             roleSelect["username"] = true
             roleSelect["email"] = true
             roleSelect["image"] = true
+            roleSelect["role"] = true
             return {...roleSelect}
         }else{
             defaultSelect["password"] = false

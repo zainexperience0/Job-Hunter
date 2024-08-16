@@ -25,13 +25,10 @@ export async function GET(req: NextRequest, params: any) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
   }
 
-
   let selectObj: any = {};
 
   // baseurl/api/v1/dynamic/model_name/id    return a single record
   if (id) {
-
-    
     schema.fields
       ?.filter((field: any) => field.backend?.includes("findUnique"))
       ?.map((field) => {
@@ -42,7 +39,7 @@ export async function GET(req: NextRequest, params: any) {
 
     const data = await prismaInstance[model_name].findUnique({
       where: {
-        id
+        id,
       },
       select: { ...newSelectObj, id: true },
     });
@@ -55,7 +52,6 @@ export async function GET(req: NextRequest, params: any) {
       OR: [],
     };
     if (fields) {
-      
       const fields_1 = fields.split(",");
       fields_1.forEach((field: any) => {
         obj.where.OR.push({
@@ -104,14 +100,10 @@ export async function GET(req: NextRequest, params: any) {
       selectObj[field.slug] = true;
     });
 
-
-
   if (page) {
     obj["skip"] = parseInt(page) * 5 - 5;
     obj["take"] = 5;
   }
-
-  
 
   if (sortBy && sortField) {
     obj["orderBy"] = {
@@ -135,6 +127,8 @@ export async function GET(req: NextRequest, params: any) {
 export async function POST(req: NextRequest, params: any) {
   const model_name = params["params"]["route"][0];
   const data_0 = await req.json();
+  console.log(JSON.stringify(data_0));
+
   const schema = allModels.find((model) => model.model === model_name);
   if (!schema?.model) {
     return NextResponse.json({ error: "Page not found" }, { status: 404 });
@@ -153,13 +147,14 @@ export async function POST(req: NextRequest, params: any) {
       return { slug: field.slug, value: data_0[field.slug] };
     });
 
-    console.log(JSON.stringify(createFields));
+  console.log(JSON.stringify(createFields));
 
   if (createFields.filter((v: any) => !v.value)?.length !== 0) {
     return NextResponse.json(
       {
         error: `Required fields are missing. ${createFields
-          .filter((v: any) => !v.value).map((v:any) => v.slug)
+          .filter((v: any) => !v.value)
+          .map((v: any) => v.slug)
           ?.join(" , ")}`,
       },
       { status: 404 }
