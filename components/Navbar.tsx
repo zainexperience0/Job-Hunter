@@ -111,11 +111,6 @@ export const Navbar = () => {
             </>
           ) : (
             <>
-              <Button variant={"secondary"}>
-                <Link href="/main/user/create">
-                  <span className="">Admin</span>
-                </Link>
-              </Button>
               <Button variant={"default"}>
                 <Link href="/main/user/create">
                   <span className="">Sign Up</span>

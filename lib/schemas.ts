@@ -411,7 +411,7 @@ export const allModels = [
         options: ["WORKING", "IN_REVIEW", "APPROVED", "NOT_APPROVED", "POSTED"],
         customClassName: "",
         backend: ["findFirst", "findUnique", "create", "update", "delete", "findMany"],
-        frontend: ["list", "view", "delete", "create", "update"],
+        frontend: ["list", "view", "delete"],
         valueGetter: () => {
           return "OPEN";
         },
@@ -438,7 +438,7 @@ export const allModels = [
         required: true,
         dataType: "relation",
         customClassName: "",
-        backend: ["create"],
+        backend: ["create", "findMany"],
         frontend: [],
         valueGetter: () => {
           return ""

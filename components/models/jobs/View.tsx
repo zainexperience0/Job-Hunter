@@ -53,7 +53,6 @@ export const ViewJob = ({ modelSlug, id }: any) => {
         });
     }
   }, [userId]);
-  
 
   const fetchData = () => {
     axios
@@ -124,22 +123,28 @@ export const ViewJob = ({ modelSlug, id }: any) => {
         <p className="text-xl text-muted-foreground">
           {isoToDate(data?.createdAt)}
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-x-2 sm:space-y-0">
-          <Link
-            href={`/${prePath}/${modelSlug}/edit/${data.id}`}
-            className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
-          >
-            <Pencil className="h-4 w-4 mr-2" />
-            Update
-          </Link>
-          <Link
-            href={`/${prePath}/${modelSlug}/delete/${data.id}`}
-            className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
-          >
-            <Trash className="h-4 w-4 mr-2" />
-            Delete
-          </Link>
-        </div>
+        {userRole.role === "ADMIN" && (
+          <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-x-2 sm:space-y-0">
+            <Link
+              href={`/${prePath}/${modelSlug}/edit/${data.id}`}
+              className={cn(
+                buttonVariants({ variant: "secondary", size: "sm" })
+              )}
+            >
+              <Pencil className="h-4 w-4 mr-2" />
+              Update
+            </Link>
+            <Link
+              href={`/${prePath}/${modelSlug}/delete/${data.id}`}
+              className={cn(
+                buttonVariants({ variant: "secondary", size: "sm" })
+              )}
+            >
+              <Trash className="h-4 w-4 mr-2" />
+              Delete
+            </Link>
+          </div>
+        )}
       </div>
       <div className="mt-4">
         <p className="text-5xl font-semibold">{data.title}</p>
@@ -173,7 +178,7 @@ export const ViewJob = ({ modelSlug, id }: any) => {
                 <TabsTrigger value="Applicants">Applicants</TabsTrigger>
               )}
             </TabsList>
-            
+
             <TabsContent value="Details">
               <Card>
                 <CardContent className="flex justify-between">

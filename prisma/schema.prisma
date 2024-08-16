@@ -33,16 +33,16 @@ model User {
 
 enum JobWorkingStatus {
   POSTED
-  WORKING
-  IN_REVIEW
-  APPROVED
-  NOT_APPROVED
+  WORKING //on start
+  IN_REVIEW // can edit
+  APPROVED //no edit
+  NOT_APPROVED //no edit
 }
 
 model WorkingOnJobs {
   id        String           @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String           @db.ObjectId
-  jobId     String           @db.ObjectId
+  userId    String           @db.ObjectId 
+  jobId     String           @db.ObjectId 
   status    JobWorkingStatus @default(POSTED)
   delievery String           @default("")
   job       Job              @relation("WorkingOnJobs", fields: [jobId], references: [id])
@@ -50,6 +50,7 @@ model WorkingOnJobs {
   createdAt DateTime         @default(now())
 
   updatedAt DateTime @updatedAt
+  @@unique([jobId, userId])
 }
 
 model Job {

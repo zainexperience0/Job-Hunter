@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
 import { prePath } from "@/lib/schemas";
+import { Badge } from "@/components/ui/badge";
 export const JobStart = ({ modelSlug, jobId }: any) => {
   const userId = useReadLocalStorage("id");
 
@@ -51,8 +52,6 @@ export const JobStart = ({ modelSlug, jobId }: any) => {
       });
   };
 
-
-  // console.log(data);
   
 
   if (!modelSlug) {
@@ -85,14 +84,23 @@ export const JobStart = ({ modelSlug, jobId }: any) => {
 
   return (
     <div className="mt-4 flex space-x-4">
-      <Button onClick={()=> location.href=`/${prePath}/${modelSlug}/submit/${data?.id}`} disabled={data?.status !== "WORKING"}>
-        Submit
-      </Button>
-      <Button onClick={onStart} disabled={data?.status !== "POSTED"}>
-        {data?.status}
+       {(data?.status || data?.status !== "POSTED" ) &&(
+        <Badge className="h-9" variant="secondary">{data?.status}</Badge>
+      )}
+     {data?.status === "WORKING" &&  <Button size={"sm"} onClick={()=> location.href=`/${prePath}/${modelSlug}/submit/${data?.id}`}>
+        Submit Delivery
+      </Button>}
+      {data?.status === "IN_REVIEW" &&  <Button size={"sm"} onClick={()=> location.href=`/${prePath}/${modelSlug}/edit/${data?.id}`}>
+        Edit Delivery
+      </Button>}
+      {(!data?.status ||data?.status === "POSTED" ) && (
+        <Button onClick={onStart}>
+        Start
         {loading && <Loader className="mx-auto animate-spin" />}
         {isFailed && "Failed"}
       </Button>
+        
+      )}
     </div>
   );
 };

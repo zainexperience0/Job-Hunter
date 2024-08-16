@@ -1,10 +1,6 @@
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { allModels, prePath } from "@/lib/schemas";
 import Link from "next/link";
 import useInfiniteQuery from "@/lib/hooks/useQuery";
@@ -15,8 +11,8 @@ import { MarkdownViewer } from "@/components/customView/markdown";
 import { cn, isoToDate, timeAgo } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useReadLocalStorage } from "usehooks-ts";
-import axios from "axios";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 export const JobApplicants = ({ modelSlug, jobId }: any) => {
   const [searchQuery, setSearchQuery] = useState(
     `&eq=true&fields=jobId&jobId=${jobId}`
@@ -26,6 +22,8 @@ export const JobApplicants = ({ modelSlug, jobId }: any) => {
     modelSlug,
     searchQuery,
   });
+
+  console.log({ data });
 
   const [loading, setLoading] = useState(true);
   const [model, setModel] = useState<any>({});
@@ -85,10 +83,11 @@ export const JobApplicants = ({ modelSlug, jobId }: any) => {
           <Fragment key={item.id}>
             <Card key={item.id} className="border-none">
               <CardContent className="p-0 flex items-center space-x-4">
-                <MarkdownViewer
-                  customClassName="prose-p:text-[13px] prose-h1:text-[18px] prose-h2:text-[17px] prose-h3:text-[16px] prose-h4:text-[15px] prose-h5:text-[14px] prose-h6:text-[13px]"
-                  content={item[model.meta.title]}
-                />
+                <Avatar>
+                  <AvatarImage src={item?.user?.image} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+          <p className="text-muted-foreground text-sm">{item?.user?.email}</p>
                 <Badge variant="destructive">{item?.status}</Badge>
               </CardContent>
 
