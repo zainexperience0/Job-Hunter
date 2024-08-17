@@ -142,18 +142,18 @@ export async function POST(req: NextRequest, params: any) {
       if (field?.required) {
         data_2[field.slug] = data_0[field.slug];
       } else {
-        data_2[field.slug] = data_0[field.slug] || "";
+        data_2[field.slug] = data_0[field.slug] || field.defaultValue ;
       }
       return { slug: field.slug, value: data_0[field.slug] };
     });
 
-  console.log(JSON.stringify(createFields));
+    console.log({data_0, data_2})
 
-  if (createFields.filter((v: any) => !v.value)?.length !== 0) {
+  if (createFields.filter((v: any) => v.value === undefined)?.length !== 0) {
     return NextResponse.json(
       {
         error: `Required fields are missing. ${createFields
-          .filter((v: any) => !v.value)
+          .filter((v: any) => v.value === undefined)
           .map((v: any) => v.slug)
           ?.join(" , ")}`,
       },
@@ -161,7 +161,7 @@ export async function POST(req: NextRequest, params: any) {
     );
   }
 
-  console.log(JSON.stringify(data_2));
+  
 
   //@ts-ignore
   const data = await prismaInstance[model_name].create({ data: data_2 });
@@ -185,11 +185,11 @@ export async function PUT(req: NextRequest, params: any) {
   const fields = schema.fields.map((field: any) => {
     return field.slug;
   });
-  Object.keys(data_0).map((key) => {
-    if (fields.includes(key)) {
-      data_2[key] = data_0[key];
-    }
-  });
+  // Object.keys(data_0).map((key) => {
+  //   if (fields.includes(key)) {
+  //     data_2[key] = data_0[key];
+  //   }
+  // });
 
   const updateFields = schema.fields
     ?.filter((field: any) => field.backend.includes("update"))
@@ -207,7 +207,7 @@ export async function PUT(req: NextRequest, params: any) {
       { status: 404 }
     );
   }
-
+console.log({data_2})
   //@ts-ignore
   const data = await prismaInstance[model_name].update({
     where: { id },

@@ -1,5 +1,3 @@
-import { nanoid } from "nanoid";
-
 export const prePath = "main";
 
 export const searchTypes = ["email", "name", "phone", "phone"];
@@ -44,7 +42,7 @@ export const allModels = [
         slug: "description",
         type: "markdownInput",
         defaultValue: "",
-        required: false,
+        required: true,
         dataType: "string",
         customClassName: "",
         backend: [
@@ -65,7 +63,7 @@ export const allModels = [
         slug: "acceptance",
         type: "markdownInput",
         defaultValue: "",
-        required: false,
+        required: true,
         dataType: "string",
         customClassName: "",
         backend: ["findFirst", "findUnique", "create", "update", "delete"],
@@ -388,14 +386,7 @@ export const allModels = [
         required: false,
         dataType: "string",
         customClassName: "",
-        backend: [
-          "findFirst",
-          "findUnique",
-          "update",
-          "delete",
-          "findMany",
-          "create",
-        ],
+        backend: ["findFirst", "findUnique", "update", "delete", "findMany"],
         frontend: ["list", "view", "update", "delete"],
         valueGetter: () => {
           return "";
@@ -410,10 +401,17 @@ export const allModels = [
         dataType: "string",
         options: ["WORKING", "IN_REVIEW", "APPROVED", "NOT_APPROVED", "POSTED"],
         customClassName: "",
-        backend: ["findFirst", "findUnique", "create", "update", "delete", "findMany"],
+        backend: [
+          "findFirst",
+          "findUnique",
+          "update",
+          "delete",
+          "findMany",
+          "create",
+        ],
         frontend: ["list", "view", "delete"],
         valueGetter: () => {
-          return "OPEN";
+          return "WORKING";
         },
       },
       {
@@ -427,8 +425,8 @@ export const allModels = [
         backend: ["create"],
         frontend: [],
         valueGetter: () => {
-          return ""
-        }
+          return "";
+        },
       },
       {
         name: "User",
@@ -438,11 +436,11 @@ export const allModels = [
         required: true,
         dataType: "relation",
         customClassName: "",
-        backend: ["create", "findMany"],
-        frontend: [],
+        backend: ["findMany", "findUnique", "create"],
+        frontend: ["list", "view"],
         valueGetter: () => {
-          return ""
-        }
+          return "";
+        },
       },
       {
         name: "Created At",
@@ -475,8 +473,6 @@ export const allModels = [
     ],
   },
 ];
-
-
 
 export const loginSchema = [
   {
@@ -564,4 +560,95 @@ export const loginSchema = [
       },
     ],
   },
-]
+];
+
+export const WorkingJobsSchema = [
+  {
+    name: "Working On Jobs",
+    model: "workingOnJobs",
+    meta: {
+      title: "delievery",
+    },
+    updateField: "updatedAt",
+    searchConfig: {
+      searchFields: ["title"],
+      sortBy: "desc",
+      sortField: "createdAt",
+    },
+    fields: [
+      {
+        name: "Delievery",
+        slug: "delievery",
+        type: "markdownInput",
+        defaultValue: "",
+        required: false,
+        dataType: "string",
+        customClassName: "",
+        backend: [
+          "findFirst",
+          "findUnique",
+          "update",
+          "delete",
+          "findMany",
+          "create",
+        ],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Status",
+        slug: "status",
+        type: "selectInput",
+        defaultValue: "WORKING",
+        required: false,
+        dataType: "string",
+        options: ["WORKING", "IN_REVIEW", "APPROVED", "NOT_APPROVED", "POSTED"],
+        customClassName: "",
+        backend: [
+          "findFirst",
+          "findUnique",
+          "update",
+          "delete",
+          "findMany",
+          "create",
+        ],
+        frontend: ["list", "view", "delete", "update"],
+        valueGetter: () => {
+          return "WORKING";
+        },
+      },
+      {
+        name: "Created At",
+        slug: "createdAt",
+        type: "",
+        defaultValue: "",
+        required: false,
+        dataType: "time",
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "findMany"],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+      {
+        name: "Updated At",
+        slug: "updatedAt",
+        type: "",
+        defaultValue: "",
+        required: false,
+        dataType: "time",
+        customClassName: "",
+        backend: ["findFirst", "findUnique", "findMany"],
+        frontend: ["list", "view"],
+        valueGetter: () => {
+          return "";
+        },
+      },
+    ],
+  },
+];
+
+// add auth for model operations

@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
-import Image from "next/image";
 import { PasswordInputField } from "@/components/custom/FieldList/PasswordInput";
 import { EmailInputField } from "@/components/custom/FieldList/EmailInputField";
 import { useLocalStorage } from 'usehooks-ts'
+
+
 export const Login = ({ model, callbackFn, relation, page }: any) => {
   const [userId, setUserId, removeUserId] = useLocalStorage('id', '')
   const [data, setData] = useState({ ...relation });
@@ -140,15 +141,18 @@ export const Login = ({ model, callbackFn, relation, page }: any) => {
           </BreadcrumbList>
         </Breadcrumb>
       )}
-      <div className="flex flex-col md:flex-row items-center justify-between space-y-10 md:space-y-0 md:space-x-10">
-        <div className="md:w-1/2 flex flex-col justify-center border p-6 rounded-md shadow-md">
+        <div className="flex flex-col justify-center border p-6 rounded-md shadow-md">
           <EmailInputField
             field={model.fields[0]}
             record={data}
             setRecord={setData}
           />
           <PasswordInputField
-            field={model.fields[1]}
+            field={{
+              ...model.fields[1],
+              name: "Password",
+              slug: "password",
+            }}
             record={data}
             setRecord={setData}
           />
@@ -158,23 +162,13 @@ export const Login = ({ model, callbackFn, relation, page }: any) => {
             className="mt-6"
           >
             {login && <Loader className="h-4 w-4 mr-2 animate-spin" />}
-            {login && "login..."}
-            {!login && !createSuccess && !createFail && "Submit"}
+            {login && "Verifying"}
+            {!login && !createSuccess && !createFail && "Sign In"}
             {createSuccess && <CheckCircle className="h-4 w-4 mr-2" />}
-            {createSuccess && `${model.name} created!`}
-            {createFail && "Failed to create!"}
+            {createSuccess && `Verified`}
+            {createFail && "Incorrect email or password"}
           </Button>
         </div>
-        <div className="">
-          <Image
-            src="/hero.webp"
-            alt={model.name}
-            width={"1080"}
-            height={"1920"}
-            className="rounded-md"
-          />
-        </div>
       </div>
-    </div>
   );
 };

@@ -6,9 +6,9 @@ import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
 import { prePath } from "@/lib/schemas";
 import { Badge } from "@/components/ui/badge";
-export const JobStart = ({ modelSlug, jobId }: any) => {
+export const JobStart = ({ modelSlug, jobId, userRole, jobStatus }: any) => {
+  
   const userId = useReadLocalStorage("id");
-
   const [jobsData, setJobsData] = useState<any>({});
   const [loading, setLoading] = useState(false);
   const [isFailed, setFailed] = useState(false);
@@ -37,7 +37,6 @@ export const JobStart = ({ modelSlug, jobId }: any) => {
       .post(`/api/v1/dynamic/${modelSlug}`, {
         ...jobsData,
         status: "WORKING",
-        delievery: "In Work",
         job: { connect: { id: jobId } },
         user: { connect: { id: userId } },
       })
@@ -51,8 +50,6 @@ export const JobStart = ({ modelSlug, jobId }: any) => {
         console.log(err);
       });
   };
-
-  
 
   if (!modelSlug) {
     return (
@@ -82,25 +79,30 @@ export const JobStart = ({ modelSlug, jobId }: any) => {
     );
   }
 
+  console.log({ userRole, jobStatus });
+
   return (
     <div className="mt-4 flex space-x-4">
        {(data?.status || data?.status !== "POSTED" ) &&(
         <Badge className="h-9" variant="secondary">{data?.status}</Badge>
       )}
-     {data?.status === "WORKING" &&  <Button size={"sm"} onClick={()=> location.href=`/${prePath}/${modelSlug}/submit/${data?.id}`}>
+    {(userRole !== "ADMIN" || jobStatus !== "CLOSED") && (
+      <>
+       {data?.status === "WORKING" &&  <Button size={"sm"} onClick={()=> location.href=`/${prePath}/${modelSlug}/submit/${data?.id}`}>
         Submit Delivery
       </Button>}
-      {data?.status === "IN_REVIEW" &&  <Button size={"sm"} onClick={()=> location.href=`/${prePath}/${modelSlug}/edit/${data?.id}`}>
+      {data?.status === "IN_REVIEW" &&  <Button size={"sm"} onClick={()=> location.href=`/${prePath}/${modelSlug}/submit/${data?.id}`}>
         Edit Delivery
       </Button>}
-      {(!data?.status ||data?.status === "POSTED" ) && (
+      {(!data?.status || data?.status === "POSTED" ) && (
         <Button onClick={onStart}>
         Start
         {loading && <Loader className="mx-auto animate-spin" />}
         {isFailed && "Failed"}
       </Button>
-        
       )}
+      </>
+    )}
     </div>
   );
 };

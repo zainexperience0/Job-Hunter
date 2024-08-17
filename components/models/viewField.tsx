@@ -15,8 +15,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
-import { CommentBox } from "./CommentBox";
+import { buttonVariants } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 

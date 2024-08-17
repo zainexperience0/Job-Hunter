@@ -1,5 +1,5 @@
 "use client";
-import { allModels, prePath } from "@/lib/schemas";
+import { prePath } from "@/lib/schemas";
 import { useEffect, useState } from "react";
 import { InputWrapper } from "../custom/inputWrapper";
 import { Button, buttonVariants } from "../ui/button";
@@ -16,14 +16,13 @@ import {
 import Link from "next/link";
 
 export const CreateField = ({ model, callbackFn, relation, page }: any) => {
-  const [data, setData] = useState({ ...relation });
+  const [data, setData] = useState<any>({ ...relation });
   const [creating, setCreating] = useState(false);
   const [createSuccess, setCreateSuccess] = useState(false);
   const [createFail, setCreateFail] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [isRelational, setIsRelational] = useState(false);
-
   const createRecord = () => {
     const requiredFields = model.fields?.filter((field: any) => field.required);
 

@@ -15,7 +15,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useReadLocalStorage } from "usehooks-ts";
@@ -24,10 +24,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { JobApplicants } from "./JobApplicants";
 
-export const ViewJob = ({ modelSlug, id }: any) => {
+export const ViewWorkingOnJob = ({ modelSlug, id }: any) => {
   const userId = useReadLocalStorage("id");
   const [userRole, setUserRole] = useState<any>({});
-
   const [data, setData] = useState<any>({});
   const [model, setModel] = useState<any>({});
   const [loading, setLoading] = useState(true);
@@ -37,7 +36,6 @@ export const ViewJob = ({ modelSlug, id }: any) => {
     setModel(allModels.find((model: any) => model.model === modelSlug));
     fetchData();
   }, []);
-  
 
   useEffect(() => {
     if (userId) {
@@ -54,7 +52,6 @@ export const ViewJob = ({ modelSlug, id }: any) => {
         });
     }
   }, [userId]);
-  
 
   const fetchData = () => {
     axios
@@ -67,6 +64,7 @@ export const ViewJob = ({ modelSlug, id }: any) => {
         setFailed(true);
       });
   };
+  
 
   if (failed) {
     return (
@@ -152,11 +150,10 @@ export const ViewJob = ({ modelSlug, id }: any) => {
         <p className="text-5xl font-semibold">{data.title}</p>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-center mt-2">
           <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarImage src={data?.user.image} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
-          <p className="text-sm text-muted-foreground">{userRole?.username}</p>
-          <Badge className="bg-green-500">Min Jobs: {data?.minCompJobs}</Badge>
+          <p className="text-sm text-muted-foreground">{data?.user.username}</p>
         </div>
       </div>
       <Separator className="h-1 w-full my-4" />
@@ -165,7 +162,6 @@ export const ViewJob = ({ modelSlug, id }: any) => {
           <Badge className="bg-blue-400">
             {data?.status}
           </Badge>
-          <Badge variant={"secondary"}>{data?.level}</Badge>
         </div>
         <p className="text-lg text-muted-foreground whitespace-nowrap mt-2 sm:mt-0">
           Updated {timeAgo(data?.updatedAt)}
@@ -173,36 +169,13 @@ export const ViewJob = ({ modelSlug, id }: any) => {
       </div>
       <div>
         <div className="">
-          <Tabs defaultValue="Details" className="w-full">
-            <TabsList>
-              <TabsTrigger value="Details">Details</TabsTrigger>
-              {userRole?.role === "ADMIN" && (
-                <TabsTrigger value="Applicants">Applicants</TabsTrigger>
-              )}
-            </TabsList>
-
-            <TabsContent value="Details">
-              <Card>
-                <CardContent className="flex justify-between">
-                  <div>
-                    <MarkdownViewer content={data?.description} />
-                    <h1 className="text-3xl font-semibold mt-10 border-b">
-                      Acceptance Criteria
-                    </h1>
-                    <MarkdownViewer content={data?.acceptance} />
-                  </div>
-                  {userRole === "ADMIN" && ( <JobStart jobStatus={data?.status} userRole={userRole?.role} modelSlug={"workingOnJobs"} jobId={data?.id} />)}
-                </CardContent>
-              </Card>
-            </TabsContent>
-            {userRole?.role === "ADMIN" && (
-              <>
-                <TabsContent value="Applicants">
-                  <JobApplicants modelSlug={"workingOnJobs"} jobId={data?.id} />
-                </TabsContent>
-              </>
-            )}
-          </Tabs>
+          <Card>
+            <CardContent className="flex justify-between">
+              <div>
+                <MarkdownViewer content={data?.delievery} />
+              </div>
+            </CardContent>
+          </Card>
         </div>
         <div></div>
       </div>

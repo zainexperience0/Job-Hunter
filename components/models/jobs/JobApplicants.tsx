@@ -7,7 +7,6 @@ import useInfiniteQuery from "@/lib/hooks/useQuery";
 import { ArrowRight, Loader, Pencil, Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { FilterTools } from "../FilterTools";
-import { MarkdownViewer } from "@/components/customView/markdown";
 import { cn, isoToDate, timeAgo } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,8 +21,6 @@ export const JobApplicants = ({ modelSlug, jobId }: any) => {
     modelSlug,
     searchQuery,
   });
-
-  console.log({ data });
 
   const [loading, setLoading] = useState(true);
   const [model, setModel] = useState<any>({});
@@ -87,8 +84,22 @@ export const JobApplicants = ({ modelSlug, jobId }: any) => {
                   <AvatarImage src={item?.user?.image} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-          <p className="text-muted-foreground text-sm">{item?.user?.email}</p>
-                <Badge variant="destructive">{item?.status}</Badge>
+                <p className="text-muted-foreground text-sm">
+                  {item?.user?.email}
+                </p>
+                <Badge
+                  variant={
+                    item?.status === "NOT_APPROVED" ? "destructive" : "default"
+                  }
+                  className={cn(
+                    `${item?.status === "APPROVED" ? "bg-green-400" : ""}`
+                  )}
+                >
+                  {item?.status}
+                </Badge>
+                <Link href={`/${prePath}/${modelSlug}/view/${item.id}`}>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </CardContent>
 
               <CardHeader className="p-0 ">

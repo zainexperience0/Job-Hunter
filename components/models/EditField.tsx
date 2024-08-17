@@ -1,5 +1,5 @@
 "use client";
-import { allModels, prePath } from "@/lib/schemas";
+import {  prePath } from "@/lib/schemas";
 import { useEffect, useState } from "react";
 import { InputWrapper } from "../custom/inputWrapper";
 import { Button } from "../ui/button";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export const EditField = ({ model, id, callbackFn }: any) => {
-  // console.log({ modelSlug, id });
+   console.log({ model, id });
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);

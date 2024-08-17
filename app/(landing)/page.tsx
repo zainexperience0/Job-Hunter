@@ -1,9 +1,17 @@
 "use client";
 
+import { Login } from "@/components/models/user/Login";
+import { allModels } from "@/lib/schemas";
 import { Briefcase } from "lucide-react";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useReadLocalStorage } from "usehooks-ts";
 
 export default function Home() {
+  const userId = useReadLocalStorage("id");
+  const router = useRouter();
+  if(userId){
+    router.push("/main/job");
+  }
   return (
     <div className="min-h-screen flex flex-col justify-between">
       {/** Hero Section */}
@@ -12,13 +20,7 @@ export default function Home() {
           Find Jobs Online and Win Bounty Prizes
         </h1>
         <div className="md:w-1/2 flex justify-center">
-          <Image
-            width={500}
-            height={500}
-            src={"/hero.webp"}
-            alt="hero"
-            className="rounded-lg shadow-lg transform transition-transform duration-500 hover:scale-105"
-          />
+         <Login model={allModels.find((m) => m.model === "user")} />
         </div>
       </div>
 

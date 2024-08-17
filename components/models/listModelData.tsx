@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { allModels, prePath } from "@/lib/schemas";
 import Link from "next/link";
@@ -15,7 +14,7 @@ import { Loader, MoveRight, Pencil, Plus, Trash } from "lucide-react";
 import useInfiniteQuery from "@/lib/hooks/useQuery";
 import { FilterTools } from "./FilterTools";
 import { cn, isoToDate, timeAgo } from "@/lib/utils";
-import { Badge } from "../ui/badge";
+
 export const ListModelData = ({ modelSlug }: any) => {
   const [searchQuery, setSearchQuery] = useState(
     `&sortby=desc&sortfield=${

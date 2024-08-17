@@ -16,6 +16,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { InputWrapper } from "@/components/custom/inputWrapper";
 import Image from "next/image";
 import { generateFromEmail } from "unique-username-generator";
+
 export const CreateUser = ({ model, callbackFn, relation, page}: any) => {
   const [data, setData] = useState({ ...relation });
   const [creating, setCreating] = useState(false);

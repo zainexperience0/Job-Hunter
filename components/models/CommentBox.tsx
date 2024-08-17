@@ -3,13 +3,11 @@ import React, { Fragment, useEffect, useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { allModels, prePath } from "@/lib/schemas";
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
+import { buttonVariants } from "../ui/button";
 import { Loader, Pencil, Trash } from "lucide-react";
 import useInfiniteQuery from "@/lib/hooks/useQuery";
 import { FilterTools } from "./FilterTools";

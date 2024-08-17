@@ -1,5 +1,5 @@
 "use client";
-import { allModels, prePath } from "@/lib/schemas";
+import { prePath } from "@/lib/schemas";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CheckCircle, Loader } from "lucide-react";
@@ -14,10 +14,11 @@ import {
 import { InputWrapper } from "@/components/custom/inputWrapper";
 import { Button } from "@/components/ui/button";
 
-export const Submit = ({ model, id, callbackFn }: any) => {
-  // console.log({ modelSlug, id });
+export const WorkingOnJobEdit = ({ model, id, callbackFn }: any) => {
 
-  const [data, setData] = useState([]);
+    console.log({model, id})
+
+  const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
 
@@ -48,7 +49,7 @@ export const Submit = ({ model, id, callbackFn }: any) => {
     axios
       .put(`/api/v1/dynamic/${model.model}/${id}`, {
         ...data,
-        status: "IN_REVIEW",
+        status: data.status,
       })
       .then((resp: any) => {
         setEditing(false);
@@ -67,9 +68,6 @@ export const Submit = ({ model, id, callbackFn }: any) => {
         setEditFail(true);
       });
   };
-
-  console.log({ data });
-  
 
   const resetFields = () => {
     setEditing(false);
@@ -93,6 +91,9 @@ export const Submit = ({ model, id, callbackFn }: any) => {
         setFailed(true);
       });
   };
+
+  console.log({ data });
+  
 
   if (!model) {
     return (
@@ -137,7 +138,7 @@ export const Submit = ({ model, id, callbackFn }: any) => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <InputWrapper model={model} data={data} setData={setData} action={"update"} />
+        <InputWrapper model={model} data={data} setData={setData} action="update"/>
       <Button
         onClick={() => {
           updateRecord();

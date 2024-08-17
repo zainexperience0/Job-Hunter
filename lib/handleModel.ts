@@ -16,6 +16,20 @@ export const handleModel = (select:any, model:any, act:any) => {
             defaultSelect["password"] = false
             return defaultSelect
         }
+    } else if(model === "workingOnJobs"){
+
+        if(defaultSelect?.user){
+            defaultSelect["user"] = {
+                select: {
+                    username: true,
+                    email: true,
+                    image:true,
+
+                }
+            }
+            return defaultSelect
+        }
+        return defaultSelect
     }else{
         return defaultSelect
     }

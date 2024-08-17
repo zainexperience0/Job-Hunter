@@ -21,8 +21,6 @@ export const InputWrapper = ({ model, data, setData, action }: any) => {
     });
     setData({ ...data, ...defaultData });
   }, []);
-
-  // console.log({ modelSlug, data, fields });
   return (
     <div>
       {fields[0] &&

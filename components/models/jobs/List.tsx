@@ -8,29 +8,39 @@ import {
 } from "@/components/ui/card";
 import { allModels, prePath } from "@/lib/schemas";
 import Link from "next/link";
-import { BugIcon, Loader, MoveRight, Pencil, Plus, Trash } from "lucide-react";
+import {
+  BugIcon,
+  Loader,
+  LogOut,
+  MoveRight,
+  Pencil,
+  Plus,
+  Trash,
+} from "lucide-react";
 import useInfiniteQuery from "@/lib/hooks/useQuery";
 
 import { cn, isoToDate, timeAgo } from "@/lib/utils";
 import { FilterTools } from "../FilterTools";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { ModeToggle } from "@/components/ModeToggle";
 export const ListJobs = ({ modelSlug }: any) => {
-  const router = useRouter();
   const userId = useReadLocalStorage("id");
+  const [value, removeValue] = useLocalStorage("id", userId);
+  const router = useRouter();
   const [user, setUser] = useState<any>({});
 
-  if(!userId){
+  if (!userId) {
     router.push("/");
   }
 
   useEffect(() => {
     axios
-      .get(`/api/v1/dynamic/user/${userId}?act=getRole`)
+      .get(`/api/v1/dynamic/user/${userId}?act=getMeta`)
       .then((resp: any) => {
         setUser(resp.data);
       })
@@ -38,9 +48,7 @@ export const ListJobs = ({ modelSlug }: any) => {
         console.log(err);
       });
   }, [userId]);
-  
 
-  
   const [searchQuery, setSearchQuery] = useState(
     `&sortby=desc&sortfield=${
       allModels.find((model) => model.model === modelSlug)?.searchConfig
@@ -75,6 +83,8 @@ export const ListJobs = ({ modelSlug }: any) => {
     );
     setLoading(false);
   }, [modelSlug]);
+
+  console.log({ user });
 
   if (!model) {
     return (
@@ -114,14 +124,28 @@ export const ListJobs = ({ modelSlug }: any) => {
             {/* <SearchModal model={model} setSearchQuery={setSearchQuery} /> */}
             <FilterTools model={model} setSearchQuery={setSearchQuery} />
           </div>
-         {user?.role === "ADMIN" && (
-           <Link
-           href={`/${prePath}/${modelSlug}/create`}
-           className={buttonVariants({ variant: "default", size: "sm" })}
-         >
-           <Plus className="h-5 w-5" />
-         </Link>
-         )}
+          <div className="flex flex-row items-center space-x-4 ml-auto pr-4">
+            <ModeToggle />
+            <Avatar>
+              <AvatarImage src={user?.image} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <p className="text-xs text-muted-foreground">{user?.username}</p>
+            <Button onClick={() =>{
+              removeValue(value);
+              router.push("/");
+            }} variant="outline" size="sm">
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
+          {user?.role === "ADMIN" && (
+            <Link
+              href={`/${prePath}/${modelSlug}/create`}
+              className={buttonVariants({ variant: "default", size: "sm" })}
+            >
+              <Plus className="h-5 w-5" />
+            </Link>
+          )}
         </div>
       )}
 
@@ -181,22 +205,22 @@ export const ListJobs = ({ modelSlug }: any) => {
                   </p>
                   {user?.role === "ADMIN" && (
                     <>
-                    <Link
-                    href={`/${prePath}/${modelSlug}/edit/${item.id}`}
-                    className={cn(
-                      buttonVariants({ variant: "default", size: "sm" })
-                    )}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href={`/${prePath}/${modelSlug}/delete/${item.id}?deletekey=title`}
-                    className={cn(
-                      buttonVariants({ variant: "default", size: "sm" })
-                    )}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Link>
+                      <Link
+                        href={`/${prePath}/${modelSlug}/edit/${item.id}`}
+                        className={cn(
+                          buttonVariants({ variant: "default", size: "sm" })
+                        )}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        href={`/${prePath}/${modelSlug}/delete/${item.id}?deletekey=title`}
+                        className={cn(
+                          buttonVariants({ variant: "default", size: "sm" })
+                        )}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Link>
                     </>
                   )}
                 </div>
