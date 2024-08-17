@@ -65,7 +65,6 @@ export const ListJobs = ({ modelSlug }: any) => {
   const [model, setModel] = useState<any>({});
 
   useEffect(() => {
-    console.log();
     setModel(allModels.find((model) => model.model === modelSlug));
     // const schema =  model.fields.filter((field: any) => field.frontend.includes("findMany"));
     // console.log(schema);
@@ -83,8 +82,6 @@ export const ListJobs = ({ modelSlug }: any) => {
     );
     setLoading(false);
   }, [modelSlug]);
-
-  console.log({ user });
 
   if (!model) {
     return (

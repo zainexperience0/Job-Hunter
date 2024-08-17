@@ -15,9 +15,6 @@ import { InputWrapper } from "@/components/custom/inputWrapper";
 import { Button } from "@/components/ui/button";
 
 export const WorkingOnJobEdit = ({ model, id, callbackFn }: any) => {
-
-    console.log({model, id})
-
   const [data, setData] = useState<any>([]);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -92,9 +89,6 @@ export const WorkingOnJobEdit = ({ model, id, callbackFn }: any) => {
       });
   };
 
-  console.log({ data });
-  
-
   if (!model) {
     return (
       <div className="mt-10 max-w-5xl mx-auto text-center">
@@ -138,7 +132,12 @@ export const WorkingOnJobEdit = ({ model, id, callbackFn }: any) => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-        <InputWrapper model={model} data={data} setData={setData} action="update"/>
+      <InputWrapper
+        model={model}
+        data={data}
+        setData={setData}
+        action="update"
+      />
       <Button
         onClick={() => {
           updateRecord();

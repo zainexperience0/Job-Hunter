@@ -127,7 +127,7 @@ export async function GET(req: NextRequest, params: any) {
 export async function POST(req: NextRequest, params: any) {
   const model_name = params["params"]["route"][0];
   const data_0 = await req.json();
-  console.log(JSON.stringify(data_0));
+  // console.log(JSON.stringify(data_0));
 
   const schema = allModels.find((model) => model.model === model_name);
   if (!schema?.model) {
@@ -147,7 +147,7 @@ export async function POST(req: NextRequest, params: any) {
       return { slug: field.slug, value: data_0[field.slug] };
     });
 
-    console.log({data_0, data_2})
+    // console.log({data_0, data_2})
 
   if (createFields.filter((v: any) => v.value === undefined)?.length !== 0) {
     return NextResponse.json(
@@ -207,7 +207,7 @@ export async function PUT(req: NextRequest, params: any) {
       { status: 404 }
     );
   }
-console.log({data_2})
+// console.log({data_2})
   //@ts-ignore
   const data = await prismaInstance[model_name].update({
     where: { id },

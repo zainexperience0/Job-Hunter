@@ -79,7 +79,7 @@ export const JobStart = ({ modelSlug, jobId, userRole, jobStatus }: any) => {
     );
   }
 
-  console.log({ userRole, jobStatus });
+  // console.log({ userRole, jobStatus });
 
   return (
     <div className="mt-4 flex space-x-4">

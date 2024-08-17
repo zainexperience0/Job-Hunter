@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export const EditField = ({ model, id, callbackFn }: any) => {
-   console.log({ model, id });
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -67,8 +67,6 @@ export const Submit = ({ model, id, callbackFn }: any) => {
         setEditFail(true);
       });
   };
-
-  console.log({ data });
   
 
   const resetFields = () => {

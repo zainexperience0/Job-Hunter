@@ -1,8 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { InputTags } from "@/components/ui/tag-input";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { cn } from "@/lib/utils";
-import { nanoid } from "nanoid";
 
 export const CustomTagInput = ({ field, record, setRecord }: any) => (
   <div className={cn("w-full flex flex-col space-y-2", field?.customClassName)}>
@@ -20,7 +18,7 @@ export const CustomTagInput = ({ field, record, setRecord }: any) => (
           : field.defaultValue || ""
       }
       onChange={(newTags) => {
-        console.log({ newTags });
+        // console.log({ newTags });
         const record_1 = { ...record, [field.slug]: newTags };
         setRecord(record_1);
       }}
